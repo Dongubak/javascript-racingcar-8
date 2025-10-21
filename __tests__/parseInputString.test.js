@@ -1,5 +1,6 @@
 import {
   isNotEmptyString,
+  isNumber,
   splitWithSeparator,
 } from '../module/parseInputString';
 
@@ -36,5 +37,27 @@ describe('splitWithSeparator 단위 모듈 테스트', () => {
     const output = splitWithSeparator(input);
 
     expect(output).toEqual(['']);
+  });
+});
+
+describe('isNumber 단위 모듈 테스트', () => {
+  test('-1 입력', () => {
+    const input = '-1';
+    const output = isNumber(input);
+
+    expect(output).toBe(true);
+  });
+  test('123 입력', () => {
+    const input = '123';
+    const output = isNumber(input);
+
+    expect(output).toBe(true);
+  });
+
+  test('a 입력', () => {
+    const input = 'a';
+    const output = isNumber(input);
+
+    expect(output).toBe(false);
   });
 });
