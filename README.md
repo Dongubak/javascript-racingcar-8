@@ -32,12 +32,16 @@
 
 ---
 
-## 순서도
+## 순서도(수정)
 ### 입력 순서도
-![alt text](/img/image-1.png)
+![alt text](/img/input_flow_lasted.png)
+
+## 순서도(deprecated)
+### 입력 순서도(deprecated)
+![alt text](/img/input_flow_deprecated.png)
 
 ### 플레이 순서도
-![alt text](image.png)
+![alt text](play_flow_lasted.png)
 
 ### 입력 제약 사항
 1. 사용자는 1 이상의 값을 입력하여 시뮬레이션을 할 수 있으며, 0 입력시 에러가 발생한다.
@@ -60,8 +64,9 @@
       3. isNotDuplicateName
    4. inputNumber
    5. isValidInputNumber
-      1. isNotNegative
-      2. isNotZero
+      1. isNumber
+      2. isNotNegative
+      3. isNotZero
 
 #### 1. inputString
 <p4>사용자로부터 문자열을 입력받는다.</p1>
@@ -93,10 +98,13 @@
 #### 5. isValidInputNumber
 <p4>사용자로부터 입력받은 숫자가 유효한지 검증한다.</p4>
 
-##### A. isNotNegative
+##### A. isNumber
+<p5>전달 받은 문자열이 숫자인지 검증한다</p5>
+
+##### B. isNotNegative
 <p5>전달받은 숫자가 음수인지 검증한다.</p5>
 
-##### B. isNotZero
+##### C. isNotZero
 <p5>전달 받은 숫자가 0인지 검증한다.</p5>
 
 ### 3. 단위 테스트
@@ -129,6 +137,13 @@ John']</p4><br />
 <p4>입력과 출력</p4><br />
 <p4>['Jaspers','sanchez'] / true</p4><br />
 <p4>['Jaspers','sanchez','Jaspers'] / false</p4><br />
+
+#### isNumber
+<p4>입력과 출력</p4><br />
+<p4>"-1" / true</p4><br />
+<p4>"123" / true</p4><br / >
+<p4>"a" / false</p4><br / >
+
 
 #### isNotNegative
 <p4>입력과 출력</p4><br />
