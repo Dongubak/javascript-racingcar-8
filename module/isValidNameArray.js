@@ -8,4 +8,7 @@ export function isNotOverFiveChar(nameArray) {
   return filteredEmptyElement.length === 0;
 }
 
-export function isNotDuplicateName(nameArray) {}
+export function isNotDuplicateName(nameArray) {
+  const afterSetArray = new Set(nameArray);
+  return nameArray.length === afterSetArray.size;
+}
