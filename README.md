@@ -82,7 +82,7 @@
 <p5>각 원소 중 빈 문자열이 있는지 검증한다.</p5>
 
 ##### B. isNotOverFiveChar
-<p5>각 원소가 5글자 이상의 이름인지 검증한다.</p5>
+<p5>각 원소가 5글자 이하의 이름인지 검증한다.</p5>
 
 ##### C. isNotDuplicateName
 <p5>각 원소 중 어느 하나라도 다른 하나와 겹치는 이름이 존재하는지 검증한다.</p5>
@@ -119,10 +119,11 @@ John']</p4><br />
 <p4>['Jaspers','sanchez',''] / false</p4><br />
 <p4>[''] / false</p4>
 
-#### isOverFiveChar
+#### isNotOverFiveChar
 <p4>입력과 출력</p4><br />
-<p4>['Jaspers','sanchez'] / true</p4><br />
-<p4>['Jaspers','sanchez','John'] / false</p4><br />
+<p4>['Semi','Khang','John'] / true</p4><br />
+<p4>['Jaspers','sanchez'] / false</p4><br />
+
 
 #### isNotDuplicateName
 <p4>입력과 출력</p4><br />
