@@ -1,6 +1,6 @@
+import { isNumber } from '../module/isValidInputNumber.js';
 import {
   isNotEmptyString,
-  isNumber,
   splitWithSeparator,
 } from '../module/parseInputString.js';
 

@@ -176,7 +176,7 @@
 
 ### TC-02: 3명 · 3회 시도 · 단독 우승
 > **이름**  
-> `three players — pobi,woni,jun / 3 — [4,3,4, 3,4,3, 4,4,4] — pobi wins`
+> `three players — pobi,woni,jun / 3 — [4,3,4,4,3,3,4,4,3] — pobi wins`
 >
 > **입력**
 >
@@ -186,10 +186,10 @@
 > | 시도 횟수 | `3` |
 >
 > **모의 랜덤(mockRandoms 전달 배열)**  
-> `[4,3,4, 3,4,3, 4,4,4]`  
+> `[4,3,4, 4,3,3, 4,4,3]`  
 > 1턴: pobi(4), woni(3), jun(4)  
-> 2턴: pobi(3), woni(4), jun(3)  
-> 3턴: pobi(4), woni(4), jun(4)
+> 2턴: pobi(4), woni(3), jun(3)  
+> 3턴: pobi(4), woni(4), jun(3)
 >
 > **기대 로그**
 >
@@ -198,19 +198,19 @@
 > woni :
 > jun  : -
 >
-> pobi : -
-> woni : -
+> pobi : --
+> woni : 
 > jun  : -
 >
 > pobi : ---
-> woni : --
-> jun  : --
+> woni : -
+> jun  : -
 > 최종 우승자 : pobi
 > ```
 
 ### TC-03: 3명 · 2회 시도 · 공동 우승
 > **이름**  
-> `tie winners — pobi,woni,jun / 2 — [4,4,3, 3,4,4] — pobi,woni win`
+> `tie winners — pobi,woni,jun / 2 — [4,4,3,4,4,3] — pobi,woni win`
 >
 > **입력**
 >
@@ -220,7 +220,7 @@
 > | 시도 횟수 | `2` |
 >
 > **모의 랜덤(mockRandoms 전달 배열)**  
-> `[4,4,3, 3,4,4]`
+> `[4, 4, 3, 4, 4, 3]`
 >
 > **기대 로그**
 >
@@ -229,12 +229,12 @@
 > woni : -
 > jun  :
 >
-> pobi : -
+> pobi : --
 > woni : --
-> jun  : -
-> 최종 우승자 : woni, pobi
+> jun  : 
+> 최종 우승자 : pobi, woni
 > ```
-> *우승자 표기는 구현 정렬 규칙(입력순/사전순)에 맞추세요. 예시는 사전순.*
+> *우승자 표기는 구현 정렬 규칙(입력순)에 맞추세요.*
 
 ---
 

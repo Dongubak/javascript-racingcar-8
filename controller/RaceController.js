@@ -28,6 +28,7 @@ import ConsoleView from '../view/ConsoleView.js';
 class RaceController {
   constructor(view = new ConsoleView()) {
     this.view = view;
+    this.history = [];
   }
 
   async run() {
@@ -43,8 +44,10 @@ class RaceController {
 
       for (let i = 0; i < validNumber; i += 1) {
         racer.tick();
-        this.view.printSnapShot(racer.snapShot());
+        this.history.push(racer.snapShot());
       }
+
+      this.view.printResult([...this.history]);
       this.view.printWinner(racer.winner());
     } catch (e) {
       throw Error(e);
