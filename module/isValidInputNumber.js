@@ -14,3 +14,8 @@ export function isNotZero(number) {
   const digit = +number;
   return digit !== 0;
 }
+
+export function isNumber(str) {
+  const s = String(str).trim();
+  return /^[-+]?\d+$/.test(s);
+}

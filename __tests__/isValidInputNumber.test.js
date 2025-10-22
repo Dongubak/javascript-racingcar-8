@@ -1,4 +1,4 @@
-import { isNotNegative, isNotZero } from '../module/isValidInputNumber';
+import { isNotNegative, isNotZero } from '../module/isValidInputNumber.js';
 
 describe('isNotNegative 단위 모듈 테스트', () => {
   test.each([

@@ -1,6 +1,8 @@
+import randForward from '../module/randForward.js';
+
 class Race {
-  constructor(players) {
-    this.racers = players;
+  constructor(racers) {
+    this.racers = racers;
     this.history = [];
   }
 
@@ -9,12 +11,17 @@ class Race {
   }
 
   winner() {
-    const maxPos = Math.max([...this.racers].map((racer) => racer.pos));
+    const posArray = [...this.racers].map((racer) => racer.pos);
+    const maxPos = Math.max(...posArray);
     const winner = this.racers.filter((racer) => racer.pos === maxPos);
     return winner;
   }
 
-  tick() {}
+  tick() {
+    this.racers.forEach((racer) => {
+      if (randForward()) racer.goForward();
+    });
+  }
 }
 
 export default Race;

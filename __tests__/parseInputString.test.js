@@ -2,7 +2,7 @@ import {
   isNotEmptyString,
   isNumber,
   splitWithSeparator,
-} from '../module/parseInputString';
+} from '../module/parseInputString.js';
 
 describe('isNotEmptyString 단위 모듈 테스트', () => {
   test.each([

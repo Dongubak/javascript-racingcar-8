@@ -2,7 +2,7 @@ import {
   isNotDuplicateName,
   isNotEmptyElement,
   isNotOverFiveChar,
-} from '../module/isValidNameArray';
+} from '../module/isValidNameArray.js';
 
 describe('isNotEmptyElement 단위 테스트', () => {
   test.each([

@@ -1,4 +1,4 @@
-class Player {
+class Racer {
   constructor(name, pos) {
     this.name = name;
     this.pos = pos;
@@ -9,4 +9,4 @@ class Player {
   }
 }
 
-export default Player;
+export default Racer;
