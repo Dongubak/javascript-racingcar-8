@@ -57,11 +57,4 @@ describe('자동차 경주', () => {
     // then
     await expect(app.run()).rejects.toThrow('[ERROR]');
   });
-
-  test('rand 테스트', () => {
-    for (let i = 0; i < 10; i++) {
-      const value = MissionUtils.Random.pickNumberInRange(0, 9);
-      console.log(value);
-    }
-  });
 });
