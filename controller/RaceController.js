@@ -26,7 +26,7 @@ import {
 import ConsoleView from '../view/ConsoleView.js';
 
 class RaceController {
-  constructor(view = new ConsoleView()) {
+  constructor(view = ConsoleView) {
     this.view = view;
     this.history = [];
   }

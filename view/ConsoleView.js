@@ -5,27 +5,27 @@ const INPUT_NAME_MESSAGE =
 const INPUT_NUMBER_MESSAGE = '시도할 횟수는 몇 회인가요?\n';
 
 class ConsoleView {
-  async getName() {
+  static async getName() {
     return getInput(INPUT_NAME_MESSAGE);
   }
 
-  async getNumber() {
+  static async getNumber() {
     return getInput(INPUT_NUMBER_MESSAGE);
   }
 
-  async printWinner(winners) {
+  static async printWinner(winners) {
     const winnerNameArray = winners.map((winner) => winner.name);
     outputData(`최종 우승자 : ${winnerNameArray.join(', ')}\n`);
   }
 
-  async printSnapShot(snapshot) {
+  static async printSnapShot(snapshot) {
     snapshot.forEach(({ name, pos }) => {
       outputData(`${name} : ${'-'.repeat(pos)}`);
     });
     outputData('');
   }
 
-  async printResult(history) {
+  static async printResult(history) {
     outputData('\n실행 결과');
     history.forEach((snapshot) => {
       this.printSnapShot(snapshot);
