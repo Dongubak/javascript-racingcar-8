@@ -178,3 +178,210 @@ describe('예외 테스트 (유효성 검증)', () => {
     await expect(app.run()).rejects.toThrow(errorIncludes);
   });
 });
+
+describe('추가 기능 테스트 (확장 케이스)', () => {
+  const MOVING = 4;
+  const STOP = 3;
+
+  test('TC-11: 세 플레이어 / 3회 시도 / woni, jun 공동 우승', async () => {
+    // 입력
+    const inputs = ['pobi,woni,jun', '3'];
+    // 라운드 별 랜덤:
+    // 1R: pobi(3), woni(4), jun(4)
+    // 2R: pobi(4), woni(3), jun(4)
+    // 3R: pobi(3), woni(4), jun(3)
+    const randoms = [
+      STOP,
+      MOVING,
+      MOVING,
+      MOVING,
+      STOP,
+      MOVING,
+      STOP,
+      MOVING,
+      STOP,
+    ];
+
+    const logSpy = getLogSpy();
+    mockQuestions(inputs);
+    mockRandoms(randoms);
+
+    const app = new App();
+    await app.run();
+
+    // 일부 스냅샷 라인과 최종 우승자 검증
+    [
+      'pobi : ', // 1R
+      'woni : -',
+      'jun : -',
+      'pobi : -', // 2R
+      'jun : --',
+      'woni : --', // 3R
+      '최종 우승자 : woni, jun',
+    ].forEach((line) => {
+      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining(line));
+    });
+  });
+
+  test('TC-12: 모두 같은 점수로 공동 우승(전 라운드 모두 이동)', async () => {
+    const inputs = ['a,b,c', '2'];
+    // 모든 트라이에서 모두 4 이상 → 모두 동일하게 2칸 이동
+    const randoms = [4, 4, 4, 4, 4, 4];
+
+    const logSpy = getLogSpy();
+    mockQuestions(inputs);
+    mockRandoms(randoms);
+
+    const app = new App();
+    await app.run();
+
+    [
+      'a : -',
+      'b : -',
+      'c : -',
+      'a : --',
+      'b : --',
+      'c : --',
+      '최종 우승자 : a, b, c',
+    ].forEach((line) => {
+      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining(line));
+    });
+  });
+
+  test('TC-13: 단일 참가자 / 다회 시도 → 스냅샷 횟수 및 우승자 검증', async () => {
+    const inputs = ['solo', '4'];
+    // 이동/정지 섞어서 4턴
+    const randoms = [4, 3, 4, 4]; // -, (정지), -, -
+
+    const logSpy = getLogSpy();
+    mockQuestions(inputs);
+    mockRandoms(randoms);
+
+    const app = new App();
+    await app.run();
+
+    // 스냅샷 라인 총 4회 출력(각 라운드마다 1줄)
+    const snapshotCalls = logSpy.mock.calls
+      .map((args) => args[0])
+      .filter((msg) => msg.includes('solo :')).length;
+    expect(snapshotCalls).toBe(4);
+
+    // 최종 우승자
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining('최종 우승자 : solo')
+    );
+  });
+
+  test('TC-14: 경계값 검증 - 랜덤이 3이면 정지, 4면 전진', async () => {
+    const inputs = ['edge', '2'];
+    // 1R: 3 → 정지, 2R: 4 → 전진
+    const randoms = [3, 4];
+
+    const logSpy = getLogSpy();
+    mockQuestions(inputs);
+    mockRandoms(randoms);
+
+    const app = new App();
+    await app.run();
+
+    // 첫 라운드 정지(대시 없음), 둘째 라운드 1칸 이동
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('edge : ')); // 1R
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('edge : -')); // 2R
+  });
+
+  // test('TC-15: 출력에 "실행 결과" 머리글이 포함되는지(형식 검증)', async () => {
+  //   const inputs = ['pobi,woni', '1'];
+  //   const randoms = [4, 4];
+
+  //   const logSpy = getLogSpy();
+  //   mockQuestions(inputs);
+  //   mockRandoms(randoms);
+
+  //   const app = new App();
+  //   await app.run();
+
+  //   expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('실행 결과'));
+  // });
+
+  // test('TC-16: 입력 2회만 수행(이름, 시도 횟수) - readLineAsync 호출 횟수 검증', async () => {
+  //   const inputs = ['pobi,woni', '2'];
+  //   mockQuestions(inputs);
+  //   mockRandoms([4, 4, 4, 4]); // (무관)
+
+  //   const app = new App();
+  //   await app.run();
+
+  //   // 이름 + 시도 횟수 총 2회 질문
+  //   expect(MissionUtils.Console.readLineAsync).toHaveBeenCalledTimes(2);
+  // });
+
+  test('TC-17: 랜덤 호출 횟수 = (참가자 수 * 시도 횟수) 검증', async () => {
+    const inputs = ['a,b,c', '5'];
+    const tries = 5;
+    const players = 3;
+    const totalRandomCalls = tries * players;
+
+    // 임의 값만큼 mockReturnValueOnce 체이닝
+    mockQuestions(inputs);
+    mockRandoms(Array.from({ length: totalRandomCalls }, () => 4));
+
+    const pickSpy = jest.spyOn(MissionUtils.Random, 'pickNumberInRange');
+
+    const app = new App();
+    await app.run();
+
+    expect(pickSpy).toHaveBeenCalledTimes(totalRandomCalls);
+    pickSpy.mockRestore();
+  });
+
+  test('TC-18: 중간 라운드 전원 정지 → 이후 라운드 이동 정상 반영', async () => {
+    const inputs = ['a,b', '3'];
+    // 1R: 이동/이동, 2R: 전원 정지, 3R: 이동/정지
+    const randoms = [4, 4, 3, 3, 4, 3];
+
+    const logSpy = getLogSpy();
+    mockQuestions(inputs);
+    mockRandoms(randoms);
+
+    const app = new App();
+    await app.run();
+
+    [
+      'a : -',
+      'b : -',
+      'a : -', // 2R에서도 변화 없음(이전과 동일)
+      'b : -',
+      'a : --', // 3R에서 a만 추가 이동
+      'b : -',
+      '최종 우승자 : a',
+    ].forEach((line) => {
+      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining(line));
+    });
+  });
+});
+
+describe('추가 예외 테스트 (강화)', () => {
+  test('TC-19: 이름에 공백만 들어온 경우(빈 문자열 취급)', async () => {
+    mockQuestions(['   ']); // 공백
+    const app = new App();
+    await expect(app.run()).rejects.toThrow('[ERROR]');
+  });
+
+  test('TC-20: 이름 구분자 끝에 콤마로 빈 이름 요소 포함', async () => {
+    mockQuestions(['pobi,', '2']);
+    const app = new App();
+    await expect(app.run()).rejects.toThrow('[ERROR]');
+  });
+
+  test('TC-21: 시도 횟수에 공백/개행 등이 섞인 경우 숫자 아님 처리', async () => {
+    mockQuestions(['pobi,woni', ' \n']);
+    const app = new App();
+    await expect(app.run()).rejects.toThrow('[ERROR]');
+  });
+
+  test('TC-22: 시도 횟수에 실수 입력(정수가 아님)', async () => {
+    mockQuestions(['pobi,woni', '1.5']);
+    const app = new App();
+    await expect(app.run()).rejects.toThrow('[ERROR]');
+  });
+});
